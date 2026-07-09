@@ -15,6 +15,11 @@
             "Avf\\Cnpj\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Avf\\Cnpj\\Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "Arthur Felipe"
