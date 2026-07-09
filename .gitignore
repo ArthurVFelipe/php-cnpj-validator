@@ -1,6 +1,9 @@
 # Dependências do Composer
 /vendor/
 
+# Composer lock
+composer.lock
+
 # IDEs
 .idea/
 .vscode/
