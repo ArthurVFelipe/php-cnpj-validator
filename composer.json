@@ -1,0 +1,30 @@
+{
+    "name": "avf/cnpj",
+    "description": "Validador de CNPJ numérico e alfanumérico",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "cnpj",
+        "validator",
+        "brasil",
+        "documento",
+        "alfanumerico"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Avf\\Cnpj\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Arthur Felipe"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^8.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    }
+}
