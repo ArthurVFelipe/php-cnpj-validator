@@ -2,42 +2,37 @@
 
 namespace Avf\Cnpj;
 
+use http\Exception\InvalidArgumentException;
+
 class Converter
 {
     /**
-     * Converte um caractere do CNPJ para seu valor numérico.
-     *
-     * Ex:
-     * A = 10
-     * B = 11
-     * Z = 35
-     * 1 = 1
+     * Converte um caractere para seu valor numérico.
      */
     public static function charToNumber(string $char): int
     {
         $char = strtoupper($char);
 
-        if (is_numeric($char)) {
+        if (preg_match('/^\d$/', $char)) {
             return (int) $char;
         }
 
-        return ord($char) - 55;
+        if (preg_match('/^[A-Z]$/', $char)) {
+            return ord($char) - 55;
+        }
+
+        throw new InvalidArgumentException(
+            "Caractere '{$char}' inválido."
+        );
     }
 
-
     /**
-     * Converte uma string completa do CNPJ.
-     *
-     * Ex:
-     * AB1C
-     *
-     * Retorna:
-     * [10,11,1,12]
+     * Converte uma sequência de caracteres em um array de inteiros.
      */
     public static function stringToNumbers(string $value): array
     {
         return array_map(
-            fn ($char) => self::charToNumber($char),
+            self::charToNumber(...),
             str_split(strtoupper($value))
         );
     }

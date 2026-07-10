@@ -1,40 +1,33 @@
 <?php
 
-namespace App\Cnpj;
+namespace Avf\Cnpj;
 
 class Validator
 {
-    public static function validate(string $cnpj): bool
+    public static function isValid(string $cnpj): bool
     {
-        $cnpj = strtoupper(
-            preg_replace('/[^A-Z0-9]/', '', $cnpj)
-        );
+        $cnpj = Formatter::removeMask($cnpj);
 
-        if (strlen($cnpj) != 14) {
+        if (strlen($cnpj) !== 14) {
             return false;
         }
 
-        $base = substr($cnpj, 0, 12);
+        try {
+            $numbers = array_map(
+                fn($char) => Converter::charToNumber($char),
+                str_split($cnpj)
+            );
+        } catch (\InvalidArgumentException $e) {
+            return false;
+        }
 
-        $values = array_map(
-            fn($c) => self::charValue($c),
-            str_split($base)
-        );
+        // Remove os dois dígitos verificadores
+        $base = array_slice($numbers, 0, 12);
 
-        $dv1 = self::calculateDigit(
-            $values,
-            [5,4,3,2,9,8,7,6,5,4,3,2]
-        );
+        // Calcula os DVs
+        $dv = Calculator::calculateDv($base);
 
-        $values[] = $dv1;
-
-        $dv2 = self::calculateDigit(
-            $values,
-            [6,5,4,3,2,9,8,7,6,5,4,3,2]
-        );
-
-        return
-            $dv1 == (int)$cnpj[12] &&
-            $dv2 == (int)$cnpj[13];
+        // Compara com os DVs informados
+        return $dv === "{$numbers[12]}{$numbers[13]}";
     }
 }

@@ -3,35 +3,19 @@
 namespace Avf\tests;
 
 use Avf\Cnpj\Calculator;
-use Avf\Cnpj\Converter;
 use PHPUnit\Framework\TestCase;
 
 class CalculatorTest extends TestCase
 {
-    public function test_calcula_primeiro_digito()
+    public function test_calculate_cnpj_digits(): void
     {
-        $values = Converter::stringToNumbers(
-            '112223330001'
-        );
+        $numbers = [
+            9,3,0,1,5,0,0,6,0,0,0,1
+        ];
 
         $this->assertEquals(
-            8,
-            Calculator::firstDigit($values)
-        );
-    }
-
-
-    public function test_calcula_segundo_digito()
-    {
-        $values = Converter::stringToNumbers(
-            '112223330001'
-        );
-
-        $values[] = Calculator::firstDigit($values);
-
-        $this->assertEquals(
-            9,
-            Calculator::secondDigit($values)
+            '13',
+            Calculator::calculateDv($numbers)
         );
     }
 }

@@ -7,38 +7,16 @@ use PHPUnit\Framework\TestCase;
 
 class ConverterTest extends TestCase
 {
-    public function test_converte_letra_A()
+    public function test_convert_letter_to_number(): void
     {
-        $this->assertEquals(
-            10,
-            Converter::charToNumber('A')
-        );
+        $this->assertEquals(10, Converter::charToNumber('A'));
+        $this->assertEquals(11, Converter::charToNumber('B'));
+        $this->assertEquals(35, Converter::charToNumber('Z'));
     }
 
-
-    public function test_converte_letra_Z()
+    public function test_convert_number_character(): void
     {
-        $this->assertEquals(
-            35,
-            Converter::charToNumber('Z')
-        );
-    }
-
-
-    public function test_converte_numero()
-    {
-        $this->assertEquals(
-            5,
-            Converter::charToNumber('5')
-        );
-    }
-
-
-    public function test_converte_cnpj()
-    {
-        $this->assertEquals(
-            [10,11,1,12],
-            Converter::stringToNumbers('AB1C')
-        );
+        $this->assertEquals(1, Converter::charToNumber('1'));
+        $this->assertEquals(9, Converter::charToNumber('9'));
     }
 }

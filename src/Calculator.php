@@ -4,43 +4,58 @@ namespace Avf\Cnpj;
 
 class Calculator
 {
+    private const FIRST_WEIGHTS = [
+        5,4,3,2,9,8,7,6,5,4,3,2
+    ];
+
+    private const SECOND_WEIGHTS = [
+        6,5,4,3,2,9,8,7,6,5,4,3,2
+    ];
+
     /**
-     * Calcula um dígito verificador.
+     * Calcula os dois dígitos verificadores.
      */
-    public static function calculateDigit(array $values, array $weights): int
+    public static function calculateDv(array $numbers): string
     {
+        $dv1 = self::calculateFirstDigit($numbers);
+
+        $numbers[] = $dv1;
+
+        $dv2 = self::calculateSecondDigit($numbers);
+
+        return "{$dv1}{$dv2}";
+    }
+
+    private static function calculateFirstDigit(array $numbers): int
+    {
+        return self::calculateDigit(
+            $numbers,
+            self::FIRST_WEIGHTS
+        );
+    }
+
+    private static function calculateSecondDigit(array $numbers): int
+    {
+        return self::calculateDigit(
+            $numbers,
+            self::SECOND_WEIGHTS
+        );
+    }
+
+    private static function calculateDigit(
+        array $numbers,
+        array $weights
+    ): int {
         $sum = 0;
 
-        foreach ($values as $index => $value) {
-            $sum += $value * $weights[$index];
+        foreach ($numbers as $index => $number) {
+            $sum += $number * $weights[$index];
         }
 
-        $remainder = $sum % 11;
+        $rest = $sum % 11;
 
-        return $remainder < 2 ? 0 : 11 - $remainder;
-    }
-
-
-    /**
-     * Primeiro dígito verificador do CNPJ
-     */
-    public static function firstDigit(array $values): int
-    {
-        return self::calculateDigit(
-            $values,
-            [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
-        );
-    }
-
-
-    /**
-     * Segundo dígito verificador do CNPJ
-     */
-    public static function secondDigit(array $values): int
-    {
-        return self::calculateDigit(
-            $values,
-            [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
-        );
+        return $rest < 2
+            ? 0
+            : 11 - $rest;
     }
 }
